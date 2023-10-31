@@ -7,6 +7,7 @@ const User = require('./models/user');
 const Contact = require('./models/contacts');
 const port = process.env.PORT || 3000;
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 // const dummyContacts = require('./data/dummy-contacts')
 
@@ -14,6 +15,7 @@ const app = express();
 
 // ==============================================================================================================
 // ==================================== necessary middlewares(.use)  ============================================
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
