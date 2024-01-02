@@ -7,7 +7,7 @@ const User = require('./models/user');
 const Contact = require('./models/contacts');
 const port = process.env.PORT || 3000;
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const session = require('express-session');
 
 // const dummyContacts = require('./data/dummy-contacts')
 
@@ -22,6 +22,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.set('view engine', 'ejs');
+// ==============================================================================================================
+// ==================================== setting up session  =====================================================
+
+app.use(session({
+    name: 'webChat',
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+        maxAge: (1000 * 60 * 100)
+    },
+}));
+
 
 // ==============================================================================================================
 // ============================= all routes will be hahdeled by ./routes/index.js  ==============================

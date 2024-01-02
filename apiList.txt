@@ -1,0 +1,18 @@
+HOME(/)
+    /   => method:get
+
+
+USER(/users)
+    /users/create  => method: post
+    /users/signIn  => method: get
+    /users/sighUp  => method: get
+    /users/sign-out  => method: get
+    /users/create-session => method:post
+
+
+PROFILE(/profile)
+    /   => method:get
+
+
+CONTACT(/contacts)
+    /   => method:get

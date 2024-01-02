@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 module.exports.signUp =async (req, res)=>{
     return res.render('signUp');
@@ -35,4 +36,42 @@ module.exports.create = async (req, res) => {
 };
 
 
+module.exports.createSession = async (req, res) => {
+    // console.log("Request dot body *************** \n",req.body);
+    try {
+        // const protectedUser = await User.findOne({ username: req.body.username }).select("-password -confirm_password");
+        const user = await User.findOne({ username: req.body.username });
+        console.log("User found *************** \n",user);
+        if (!user || user.password !== req.body.password) {
+            return res.status(401).json({ status: 'error', message: 'Invalid username/password' });
+        }
+        // req.session.user = user;
+        // res.render('profile', req.session.user);
+        // console.log(req.session.user)
+        return res.status(200).json({ status: 'success', message: 'Logged in successfully', data: user });
 
+        
+    } catch (error) {
+        console.error('Error creating session:', error);
+        return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+        
+    }
+}
+
+
+module.exports.destroySession = (req, res) => {
+    req.session.destroy();
+    return res.status(200).json({ status: 'success', message: 'Logged out successfully' });
+}
+
+
+module.exports.login = async (req, res) => {
+    const user = await User.findOne({ username: req.body.username });
+    // console.log("User found *************** \n",user);
+    if (!user || user.password !== req.body.password) {
+        return res.status(401).json({ status: 'error', message: 'Invalid username/password' });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY);
+    return res.status(200).json({ status: 'success', message: 'Logged in successfully and  JWT created', data: { token: token } });
+}
